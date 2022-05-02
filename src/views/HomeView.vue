@@ -1,11 +1,16 @@
 <script>
   import { useCounterStore} from '@/stores/counter.js';
-  import { mapState, mapActions } from "pinia";
+  import { mapState, mapActions, mapWritableState } from "pinia";
+  import TheCounter from '@/components/TheCounter.vue';
 
   export default {
     name: 'HomeView',
+    components: {
+      TheCounter,
+    },
     computed: {
-      ...mapState(useCounterStore, ['counter', 'isEvenOrOdd']),
+      ...mapState(useCounterStore, ['isEvenOrOdd']),
+      ...mapWritableState(useCounterStore, ['counter']),
     },
     methods: {
       ...mapActions(useCounterStore, ['increment', 'decrement']),
@@ -16,12 +21,18 @@
 <template>
   <main>
     <h1>Home</h1>
-    <p class="count">{{counter}}</p>
+    <TheCounter></TheCounter>
     <div class="buttons">
       <button @click="increment">+</button>
       <button @click="decrement">-</button>
     </div>
-    <p>The number is {{isEvenOrOdd}}</p>
+    <hr>
+    <p class="type">The number is {{isEvenOrOdd}}</p>
+    <hr>
+    <div>
+      <h3>Edit counter:</h3>
+      <input type="number" v-model="counter">
+    </div>
   </main>
 </template>
 
@@ -38,6 +49,19 @@
     padding: 0.5rem 1rem;
     margin: 0.5rem;
     cursor: pointer;
+  }
+
+  hr {
+    margin: 10px 0;
+  }
+
+  .type {
+    margin: 10px 0;
+    font-size: 1.6rem;
+  }
+
+  input {
+    font-size: 1.2rem;
   }
 
 </style>
